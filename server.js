@@ -13,7 +13,7 @@ app.use(express.json());
 // not sure this goes here, or if it's necessary in this case, so consider this a bookmark.
 // const dbName = 'socialDB';
 
-// routes go in controllers
+// routes go in routes, controllers go in controllers... double-check how i'm defining/using them
 
 // PRETTY sure this goes here. 
 db.once('open', () => {
