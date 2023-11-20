@@ -1,5 +1,7 @@
 // boilerplate we walked through in class
 // MODIFY where useful
+// should this be renamed to index???
+
 const express = require('express');
 // connecting to database/mongoose
 const db = require('./config/connection');
