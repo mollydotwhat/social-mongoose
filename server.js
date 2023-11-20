@@ -5,56 +5,19 @@ const express = require('express');
 const db = require('./config/connection');
 
 const app = express();
-const port = 3001;
-
-// Connection string to local instance of MongoDB
-const connectionStringURI = `mongodb://127.0.0.1:27017`;
-
-// Initialize a new instance of MongoClient
-const client = new MongoClient(connectionStringURI);
-
-
-
-// Create variable to hold our database name
-const dbName = 'socialDB';
-
-// Use connect method to connect to the mongo server
-client.connect()
-  .then(() => {
-    console.log('Connected successfully to MongoDB');
-    // Use client.db() constructor to add new db instance
-    db = client.db(dbName);
-
-    // start up express server
-    app.listen(port, () => {
-      console.log(`Example app listening at http://localhost:${port}`);
-    });
-  })
-  .catch((err) => {
-    console.error('Mongo connection error: ', err.message);
-  });
-
-// Built in Express function that parses incoming requests to JSON
+const PORT = process.env.PORT || 3001;
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// app.post('/create', (req, res) => {
-//   // Use db connection to add a document
-//   db.collection('petCollection').insertOne(
-//     { name: req.body.name, breed: req.body.breed }
-//   )
-//     .then(results => res.json(results))
-//     .catch(err => {
-//       if (err) throw err;
-//     });
-// });
+// Create variable to hold our database name
+// not sure this goes here, or if it's necessary in this case, so consider this a bookmark.
+// const dbName = 'socialDB';
 
-// app.get('/read', (req, res) => {
-//   // Use db connection to find all documents in collection
-//   db.collection('petCollection')
-//     .find()
-//     .toArray()
-//     .then(results => res.json(results))
-//     .catch(err => {
-//       if (err) throw err;
-//     });
-// });
+// routes go in controllers
+
+// PRETTY sure this goes here. 
+db.once('open', () => {
+    app.listen(PORT, () => {
+      console.log(`API server running on port ${PORT}!`);
+    });
+  });
