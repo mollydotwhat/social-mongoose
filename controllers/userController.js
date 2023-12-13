@@ -6,7 +6,8 @@ module.exports = {
 // get all users
 async allUsers (req, res) {
     try {
-        // const payload = await 
+        const payload = await User.find().select('__v')
+        res.json({ status: 'success', payload })
 
         // res.json({status: 'success', payload})
     } catch (err) {
@@ -16,13 +17,9 @@ async allUsers (req, res) {
 
 // one by id
 async oneUser (req, res) {
-    try {
-        // const payload = await 
+    const payload = await Thought.findOne({ _id: req.params.id }).populate({path: 'userId'}).select('__v')
 
-        // res.json({status: 'success', payload})
-    } catch (err) {
-        res.status(500).json({status: 'error', payload: err.message});
-    }
+    res.json({status: 'success', payload})
 },
 
 // new user
