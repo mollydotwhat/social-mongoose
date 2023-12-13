@@ -4,13 +4,13 @@ const Reaction = require('./Reaction')
 const thoughtSchema = new Schema(
     {
         thoughtText: {
-            type: String
-            //btwn 1 and 280 chars
+            type: String,
+            minLength: [1, 'you need at least one character!'],
+            maxLength: [280, 'Too long! The maximum is 280 characters.']
         },
         createdAt: {
             type: Date,
             default: Date.now
-            // getter to format timestamp on query
         },
         username: {
             type: String,

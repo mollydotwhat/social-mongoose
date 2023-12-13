@@ -1,7 +1,7 @@
 const User = require('./User');
 const Thought = require('./Thought');
-// const Reaction = require('./Reaction');
+// reaction is only a schema that gets imported into thought for tidiness
 
 //MODELS go here, not routes
 
-module.exports = { User, Thought, /* Reaction */ }
+module.exports = { User, Thought }
