@@ -43,7 +43,7 @@ module.exports = {
     // edit one
     async updateThought(req, res) {
         try {
-            const payload = await Thought.findOneAndUpdate( {_id: req.params.id }, {$set: req.body },) 
+            const payload = await Thought.findOneAndUpdate( {_id: req.params.id }, {$set: req.body },);
 
             res.json({status: 'success', payload})
         } catch (err) {
@@ -67,9 +67,10 @@ module.exports = {
     // create one
     async newReaction(req, res) {
         try {
-            // const payload = await 
-            // remember to push reaction to thought's reaction array? check this syntax
-            // res.json({status: 'success', payload})
+            // this should just be updating the thought. since reaction shouldn't be a model...for some reason.
+            const reactingTo = await Thought.findOneAndUpdate({_id: req.body.userId}, {  $addToSet: { reactions: req.body }},);
+            res.json({status: 'success', reactingTo})
+
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
         }
@@ -77,9 +78,8 @@ module.exports = {
 
     async deleteReaction(req, res) {
         try {
-            // const payload = await 
-
-            // res.json({status: 'success', payload})
+            const removeReaction = await Thought.findOneAndUpdate({_id: req.body.userId}, {  $pull: { reactions: {_id: req.params.id} }},);
+            res.json({status: 'success'}, `reaction REMOVED`)
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
         }
