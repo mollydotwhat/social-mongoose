@@ -1,4 +1,4 @@
-const { Thought } = require('../models');
+const { Thought, User } = require('../models');
 // crud for thought--also reactions. (except reactions don't need get ALL-- just create & delete by Thought.findOneAndUpdate)
 
 
@@ -18,9 +18,9 @@ module.exports = {
     // get one by ids
     async oneThought(req, res) {
         try {
-            // const payload = await 
+            const payload = await Thought.findOne({ _id: req.params.id }).populate({path: 'userId'}).select('__v')
 
-            // res.json({status: 'success', payload})
+            res.json({status: 'success', payload})
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
         }
@@ -29,9 +29,12 @@ module.exports = {
     // create one
     async newThought(req, res) {
         try {
-            // const payload = await 
-            // remember to push thought id to user's thoughts array
-            // res.json({status: 'success', payload})
+            const payload = await Thought.create(req.body);
+
+            // add thought to user's array
+            const user = await User.findOneAndUpdate({_id: req.body.userId}, {  $addToSet: { thoughts: payload._id } }, ) 
+
+            res.json({status: 'success', payload})
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
         }
@@ -40,9 +43,9 @@ module.exports = {
     // edit one
     async updateThought(req, res) {
         try {
-            // const payload = await 
+            const payload = await Thought.findOneAndUpdate( {_id: req.params.id }, {$set: req.body },) 
 
-            // res.json({status: 'success', payload})
+            res.json({status: 'success', payload})
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
         }
@@ -51,9 +54,10 @@ module.exports = {
     // remove one
     async deleteThought(req, res) {
         try {
-            // const payload = await 
+            const payload = await Thought.findOneAndDelete({ _id: req.params.id });
 
-            // res.json({status: 'success', payload})
+            // const user = await User.findOneAndUpdate to take thought out of array? do I need to?
+            res.json({status: 'success'}, `thought deleted!`)
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
         }
@@ -79,5 +83,5 @@ module.exports = {
             res.status(500).json({ status: 'error', payload: err.message });
         }
     },
-    
+
 }
