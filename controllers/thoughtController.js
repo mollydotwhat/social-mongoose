@@ -56,7 +56,8 @@ module.exports = {
         try {
             const payload = await Thought.findOneAndDelete({ _id: req.params.id });
 
-            // const user = await User.findOneAndUpdate to take thought out of array? do I need to?
+            const user = await User.findOneAndUpdate({_id: req.params.userId}) 
+            // to take thought out of array? do I need to?
             res.json({status: 'success'}, `thought deleted!`)
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
