@@ -56,6 +56,26 @@ module.exports = {
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
         }
+    },
+
+    async addFriend(req, res){
+        try {
+            // this should just be updating the thought. since 
+            const beFriend = await User.findOneAndUpdate({_id: req.params.id }, {  $addToSet: { friends: req.body.userId }},);
+            res.json({status: 'success', beFriend})
+
+        } catch (err) {
+            res.status(500).json({ status: 'error', payload: err.message });
+        }
+    },
+
+    async deleteFriend (req, res) {
+        try {
+            const removeFriend = await User.findOneAndUpdate({_id: req.params.id}, {  $pull: { friends: {_id: req.body.userId} }},);
+            res.json({status: 'success'}, `friend REMOVED`)
+        } catch (err) {
+            res.status(500).json({ status: 'error', payload: err.message });
+        }
     }
 
 

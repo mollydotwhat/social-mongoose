@@ -6,8 +6,8 @@ const userRoutes = require('./user.routes');
 
 // keep it simple
 // router.use('/path', route) for each
-router.use('/user', userRoutes);
-router.user('/thought', thoughtRoutes)
+router.use('/users', userRoutes);
+router.user('/thoughts', thoughtRoutes)
 
 
 
