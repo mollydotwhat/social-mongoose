@@ -8,6 +8,7 @@ module.exports = {
     async allThoughts(req, res) {
         try {
             const payload = await Thought.find().populate({ path: 'userId' }).select('__v')
+            console.log('got all thoughts')
             res.json({ status: 'success', payload })
 
         } catch (err) {
@@ -19,7 +20,7 @@ module.exports = {
     async oneThought(req, res) {
         try {
             const payload = await Thought.findOne({ _id: req.params.id }).populate({path: 'userId'}).select('__v')
-
+            console.log('got one thought')
             res.json({status: 'success', payload})
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
@@ -33,7 +34,8 @@ module.exports = {
 
             // add thought to user's array
             const user = await User.findOneAndUpdate({_id: req.body.userId}, {  $addToSet: { thoughts: payload._id } }, ) 
-
+            
+            console.log('wrote new thought')
             res.json({status: 'success', payload})
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
@@ -45,6 +47,7 @@ module.exports = {
         try {
             const payload = await Thought.findOneAndUpdate( {_id: req.params.id }, {$set: req.body },);
 
+            console.log('thought updated')
             res.json({status: 'success', payload})
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
@@ -57,7 +60,7 @@ module.exports = {
             const payload = await Thought.findOneAndDelete({ _id: req.params.id });
 
             const user = await User.findOneAndUpdate({_id: req.params.userId}) 
-            // to take thought out of array? do I need to?
+            console.log(`${user} deleted a thought`);
             res.json({status: 'success'}, `thought deleted!`)
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
@@ -69,6 +72,7 @@ module.exports = {
         try {
             // this should just be updating the thought. since reaction shouldn't be a model...for some reason.
             const reactingTo = await Thought.findOneAndUpdate({_id: req.body.userId}, {  $addToSet: { reactions: req.body }},);
+            console.log('reaction added')
             res.json({status: 'success', reactingTo})
 
         } catch (err) {
@@ -79,6 +83,7 @@ module.exports = {
     async deleteReaction(req, res) {
         try {
             const removeReaction = await Thought.findOneAndUpdate({_id: req.body.userId}, {  $pull: { reactions: {_id: req.params.id} }},);
+            console.log("deleting reaction")
             res.json({status: 'success'}, `reaction REMOVED`)
         } catch (err) {
             res.status(500).json({ status: 'error', payload: err.message });
